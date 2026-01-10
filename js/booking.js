@@ -36,8 +36,6 @@ function getSeason(date) {
     const month = date.getMonth();
     const day = date.getDate();
 
-    console.log('getSeason called:', {date: date, month: month, day: day});
-
     // Peak: June 15 - September 15
     if (month === 5 && day >= 15) return PRICING.peak;  // June 15+
     if (month === 6 || month === 7) return PRICING.peak;  // July, August
@@ -48,16 +46,12 @@ function getSeason(date) {
     if (month === 9) return PRICING.fall;  // October
 
     // Winter: November 1 - April 30
-    if (month >= 10 || month <= 3) {
-        console.log('Returning winter season');
-        return PRICING.winter;  // Nov-April
-    }
+    if (month >= 10 || month <= 3) return PRICING.winter;  // Nov-April
 
     // Spring: May 1 - June 14
     if (month === 4) return PRICING.spring;  // May
     if (month === 5 && day < 15) return PRICING.spring;  // June 1-14
 
-    console.log('Returning default spring season');
     return PRICING.spring;
 }
 
@@ -68,12 +62,9 @@ function getPricingForDates(checkIn, checkOut) {
     let highestPricing = getSeason(current);
     let highestRate = highestPricing.nightlyRate;
 
-    console.log('getPricingForDates:', {checkIn: checkIn, checkOut: checkOut, initialSeason: highestPricing.name});
-
     // Check each day in the range
     while (current < checkOut) {
         const seasonPricing = getSeason(current);
-        console.log('Checking date:', current, 'Season:', seasonPricing.name, 'Rate:', seasonPricing.nightlyRate);
         if (seasonPricing.nightlyRate > highestRate) {
             highestPricing = seasonPricing;
             highestRate = seasonPricing.nightlyRate;
@@ -81,7 +72,6 @@ function getPricingForDates(checkIn, checkOut) {
         current.setDate(current.getDate() + 1);
     }
 
-    console.log('Final pricing:', highestPricing.name);
     return highestPricing;
 }
 
@@ -111,7 +101,6 @@ window.calculatePrice = function() {
 
     // Get pricing based on season
     const pricing = getPricingForDates(checkIn, checkOut);
-    const isPeak = pricing === PRICING.peak;
 
     // Check if bringing pets
     const bringingPets = document.getElementById('bringing-pets')?.checked || false;
