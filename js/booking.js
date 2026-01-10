@@ -162,7 +162,7 @@ window.calculatePrice = function() {
     // Store pricing info for validation
     window.currentPricing = pricing;
 
-    // Update hidden form fields for Netlify
+    // Update hidden form fields
     const formSeason = document.getElementById('form-season');
     const formNights = document.getElementById('form-nights');
     const formTotal = document.getElementById('form-total');
@@ -237,14 +237,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Form is valid - let it submit to Netlify
-        // Netlify will handle the submission and redirect to success.html
+        // Form is valid - let it submit to Web3Forms
+        // Web3Forms will handle the submission and redirect to success.html
         return true;
     });
 });
 
-// Netlify Forms handles submission automatically
-// Form will submit to Netlify and redirect to success.html
+// Web3Forms handles submission automatically
+// Form will submit to Web3Forms and redirect to success.html
 
 // Stripe Integration Setup (for real implementation)
 // Uncomment and configure when you're ready to accept real payments

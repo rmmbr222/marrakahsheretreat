@@ -475,9 +475,15 @@
                     </div>
                 </div>
                 <div class="booking-form-container">
-                    <form id="booking-form" class="booking-form" name="booking-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
+                    <form id="booking-form" class="booking-form" name="booking-request" method="POST" action="https://api.web3forms.com/submit">
+                        <!-- Web3Forms Access Key - Get yours free at https://web3forms.com -->
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY_HERE">
+
+                        <!-- Redirect after submission -->
+                        <input type="hidden" name="redirect" value="https://yourdomain.com/success.html">
+
                         <!-- Hidden honeypot field for spam protection -->
-                        <input type="hidden" name="bot-field" />
+                        <input type="hidden" name="botcheck" class="hidden" style="display: none">
 
                         <!-- Hidden fields for calculated values -->
                         <input type="hidden" name="season" id="form-season" />
