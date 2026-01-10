@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Marrakahshe Retreat</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2c5f5d 0%, #1a3b3a 100%);
+            padding: 2rem;
+        }
+
+        .success-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: #4caf50;
+            margin-bottom: 1.5rem;
+            animation: checkmark 0.5s ease-in-out;
+        }
+
+        @keyframes checkmark {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .success-title {
+            font-size: 2.5rem;
+            color: #2c5f5d;
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .confirmation-details {
+            background: #f8f6f3;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2c5f5d;
+        }
+
+        .detail-value {
+            color: #666;
+        }
+
+        .next-steps {
+            background: #e8f5e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid #4caf50;
+        }
+
+        .next-steps h3 {
+            color: #2c5f5d;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .next-steps ul {
+            text-align: left;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .next-steps li {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-home {
+            display: inline-block;
+            background: #2c5f5d;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            background: #1a3b3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .email-note {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">📧</div>
+            <h1 class="success-title">Booking Request Received!</h1>
+            <p class="success-message">
+                Thank you for your booking request! We'll review your dates and get back to you within 24 hours
+                to confirm availability and complete your reservation.
+            </p>
+
+            <div class="confirmation-details">
+                <h3 style="color: #2c5f5d; margin-bottom: 1rem;">Request Submitted</h3>
+                <div id="booking-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Property:</span>
+                        <span class="detail-value">Marrakahshe Retreat</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location:</span>
+                        <span class="detail-value">Gravenhurst, Ontario</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value">Pending Review</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3>What Happens Next?</h3>
+                <ul>
+                    <li>📧 You'll receive an email confirmation within 24 hours</li>
+                    <li>✅ We'll confirm availability and send payment instructions</li>
+                    <li>📋 Check-in details will be sent after payment confirmation</li>
+                    <li>🏡 Check-in: 4:00 PM | Check-out: 11:00 AM</li>
+                    <li>💬 Questions? Check your email for our response</li>
+                </ul>
+            </div>
+
+            <a href="index.html" class="btn-home">Return to Home</a>
+
+            <p class="email-note">
+                A confirmation email has been sent to your inbox. Please check your spam folder if you don't see it.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Netlify Forms handles the submission
+        // You will receive an email notification with all the booking details
+        // Guest will see this success page after submitting their request
+    </script>
+</body>
+</html>

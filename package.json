@@ -1,0 +1,16 @@
+{
+  "name": "marrakahshe-retreat-booking",
+  "version": "1.0.0",
+  "description": "Direct booking website for Marrakahshe Retreat",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "stripe": "^11.1.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^12.0.0"
+  }
+}

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Organizer - Drag & Drop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #2c5f5d;
+        }
+
+        .instructions {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #2c5f5d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: #1a3b3a;
+        }
+
+        .btn-secondary {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background: #c19b2b;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c5f5d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .photo-count {
+            background: #2c5f5d;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            min-height: 100px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 2px dashed #ddd;
+        }
+
+        .photo-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: move;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .photo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .photo-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .photo-item.drag-over {
+            border: 2px solid #2c5f5d;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-info {
+            padding: 8px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .photo-filename {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .output {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .code-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .code-output.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .add-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 6px;
+        }
+
+        .add-section input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📸 Photo Organizer - Drag & Drop</h1>
+        <p class="instructions">
+            Drag and drop photos to reorganize them into categories. Create new sections, move photos between sections, and when you're done, click "Generate Code" to get the HTML for your website.
+        </p>
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="generateCode()">Generate Code</button>
+            <button class="btn" onclick="copyCode()">Copy to Clipboard</button>
+            <button class="btn" onclick="resetToOriginal()">Reset to Original</button>
+        </div>
+    </div>
+
+    <div id="sections-container"></div>
+
+    <div class="add-section">
+        <input type="text" id="new-section-name" placeholder="New section name (e.g., 'Sunset Views')">
+        <button class="btn" onclick="addNewSection()">Add New Section</button>
+    </div>
+
+    <div class="output">
+        <h2 style="margin-bottom: 10px;">Generated HTML Code</h2>
+        <p style="color: #666; font-size: 14px;">Click "Generate Code" to see the HTML for your reorganized gallery.</p>
+        <div id="code-output" class="code-output"></div>
+        <div id="success-message" class="success-message">Code copied to clipboard!</div>
+    </div>
+
+    <script>
+        // Photo data - all 42 extended gallery photos
+        const photos = [
+            { file: 'e640b48c-798f-4edb-b20f-dd51a92f3426.jpg', alt: 'Property exterior' },
+            { file: '0538a8e2-e970-433a-ab71-980997e73946.jpeg', alt: 'Cottage from lake' },
+            { file: 'b034a8c4-ef6c-4b87-9531-c0145eea1521.jpeg', alt: 'Sunset over lake' },
+            { file: 'eb293b24-5ebf-45c5-82f0-704ec636bb2a.jpeg', alt: 'Waterfront panorama' },
+            { file: 'd427cca4-e6cc-40b1-837e-ffd46e8a29e9.jpeg', alt: 'Lake activities' },
+            { file: '43681e43-b9ab-4c35-8ef1-8226a54f87de.jpeg', alt: 'Private dock' },
+            { file: '1bffb0dc-b821-4816-acc7-26cd6ab96b4b.jpeg', alt: 'Lakeside deck' },
+            { file: '6ecbeb17-df05-488c-a3cd-2d9ee6e00518.jpg', alt: 'Outdoor seating' },
+            { file: '7f6ad453-aa04-489d-8cb5-740486aa19d9.jpg', alt: 'Fire pit area' },
+            { file: '2d0e0c1f-d6d1-4be7-849c-a6ce8acb79d0.jpeg', alt: 'Outdoor dining' },
+            { file: '9d67d72b-d59f-46a4-b983-e9c6e4c83cfd.jpg', alt: 'Private sauna' },
+            { file: '6d1188c9-b373-482d-87a4-0ee95e6262eb.jpg', alt: 'Master bedroom' },
+            { file: '25fc8655-90d2-40c8-8ed8-f0f4ca616a8e.jpeg', alt: 'Bedroom with lake view' },
+            { file: 'ca9b823f-5197-4299-bec6-c7c4dd78771a.jpeg', alt: 'Bedroom detail' },
+            { file: '95bd7b73-a8f7-40ea-9880-8d5680ccd6ed.jpeg', alt: 'Bedroom space' },
+            { file: 'b388df31-07e2-40a0-a59c-362f548f3120.jpeg', alt: 'Bedroom interior' },
+            { file: '5e7a017a-cf8b-41bf-8aba-1ab2f4b29a35.jpeg', alt: 'Guest bedroom' },
+            { file: 'b1a1d3d5-74d1-485f-996f-14945a9963bd.jpeg', alt: 'Bedroom feature' },
+            { file: '582427cb-fd2d-49c4-9f4f-09dfbe40a6bb.jpeg', alt: 'Living room' },
+            { file: '51e41424-dc11-4b0e-8474-2c6fe190227c.jpeg', alt: 'Living area detail' },
+            { file: '3c1a499d-b7ab-40f4-b92b-caece9054d32.jpg', alt: 'Interior space' },
+            { file: '551eac49-0cf4-436c-9091-4decfcc5ce06.jpg', alt: 'Cozy sitting area' },
+            { file: '51c3da37-f9dd-4627-8830-d706b8a1d233.jpg', alt: 'Kitchen' },
+            { file: 'ec5d07e4-6c24-4868-837d-c7034f1d3337.jpg', alt: 'Kitchen detail' },
+            { file: '65a1c337-90b3-4b6d-972c-70b8be30c711.jpeg', alt: 'Dining area' },
+            { file: 'f964ccbf-484d-42b3-bc47-948dfdf63b39.jpeg', alt: 'Bathroom' },
+            { file: '02d2e07a-abdd-47a8-b7ab-d1375159dc9e.jpeg', alt: 'Interior detail' },
+            { file: '0c313695-0b9f-46b5-b218-d060161db1bd.jpeg', alt: 'Decor detail' },
+            { file: '2436b97a-7bc4-4911-99b6-fcad50281265.jpeg', alt: 'Interior feature' },
+            { file: '3b031ced-526f-4cf6-8b8a-188839af57a2.jpg', alt: 'Design element' },
+            { file: '41258010-786d-4367-bfaf-4a31291c1fa8.jpeg', alt: 'Interior accent' },
+            { file: '54ed72cb-c48e-41aa-a4da-0b46ff383c92.jpeg', alt: 'Design feature' },
+            { file: '8d8d9a4c-94d7-4528-a834-51929b7969a2.jpeg', alt: 'Interior style' },
+            { file: '9ecb1315-c37f-4330-8e6e-0aaa90060608.jpeg', alt: 'Room detail' },
+            { file: 'a0f88748-6cd6-44ad-9d66-6c30c9339d0a.jpeg', alt: 'Decor accent' },
+            { file: 'b3b369b4-f6b2-42a8-977b-e8b5468f104d.jpeg', alt: 'Interior touch' },
+            { file: 'ba7baaf1-d58f-41ec-a0a0-d30937df5831.jpeg', alt: 'Room accent' },
+            { file: 'c04321d2-3e4a-4ebb-8387-514bd579bdaf.jpeg', alt: 'Style detail' },
+            { file: 'ca7e433c-be90-433c-a2cb-105c6a8d1619.jpeg', alt: 'Interior view' },
+            { file: 'f367e6b3-b9a3-41e5-8860-864a4ceb1fdf.jpeg', alt: 'Space detail' },
+            { file: '111543c1-5228-4ed1-a502-22beaa5ad62c.png', alt: 'Floor plan' },
+            { file: '2356F8BF-5FA8-48D8-88DE-CE3D5365C39D.JPG', alt: 'Property view' }
+        ];
+
+        // Initial sections
+        let sections = [
+            { name: 'Nature & Waterfront', photos: photos.slice(0, 11) },
+            { name: 'Bedrooms', photos: photos.slice(11, 18) },
+            { name: 'Living Spaces', photos: photos.slice(18, 22) },
+            { name: 'Kitchen & Dining', photos: photos.slice(22, 25) },
+            { name: 'Bathroom', photos: photos.slice(25, 26) },
+            { name: 'Interior Details', photos: photos.slice(26, 40) },
+            { name: 'Floor Plan', photos: photos.slice(40, 41) },
+            { name: 'Additional', photos: photos.slice(41) }
+        ];
+
+        function renderSections() {
+            const container = document.getElementById('sections-container');
+            container.innerHTML = '';
+
+            sections.forEach((section, sectionIndex) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'section-title';
+                titleDiv.innerHTML = `
+                    ${section.name}
+                    <span class="photo-count">${section.photos.length} photos</span>
+                    ${sections.length > 1 ? `<button class="btn" style="margin-left: auto; padding: 5px 10px; font-size: 12px;" onclick="deleteSection(${sectionIndex})">Delete Section</button>` : ''}
+                `;
+
+                const gridDiv = document.createElement('div');
+                gridDiv.className = 'photo-grid';
+                gridDiv.dataset.sectionIndex = sectionIndex;
+                gridDiv.addEventListener('dragover', handleDragOver);
+                gridDiv.addEventListener('drop', handleDrop);
+
+                section.photos.forEach((photo, photoIndex) => {
+                    const photoDiv = createPhotoElement(photo, sectionIndex, photoIndex);
+                    gridDiv.appendChild(photoDiv);
+                });
+
+                sectionDiv.appendChild(titleDiv);
+                sectionDiv.appendChild(gridDiv);
+                container.appendChild(sectionDiv);
+            });
+        }
+
+        function createPhotoElement(photo, sectionIndex, photoIndex) {
+            const div = document.createElement('div');
+            div.className = 'photo-item';
+            div.draggable = true;
+            div.dataset.sectionIndex = sectionIndex;
+            div.dataset.photoIndex = photoIndex;
+
+            div.addEventListener('dragstart', handleDragStart);
+            div.addEventListener('dragend', handleDragEnd);
+            div.addEventListener('dragenter', handleDragEnter);
+            div.addEventListener('dragleave', handleDragLeave);
+
+            div.innerHTML = `
+                <img src="images/${photo.file}" alt="${photo.alt}">
+                <div class="photo-info">
+                    <div class="photo-filename">${photo.file.substring(0, 20)}...</div>
+                </div>
+            `;
+
+            return div;
+        }
+
+        let draggedElement = null;
+
+        function handleDragStart(e) {
+            draggedElement = e.target.closest('.photo-item');
+            draggedElement.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(e) {
+            e.target.closest('.photo-item').classList.remove('dragging');
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        }
+
+        function handleDragEnter(e) {
+            const target = e.target.closest('.photo-item');
+            if (target && target !== draggedElement) {
+                target.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            const target = e.target.closest('.photo-item');
+            if (target) {
+                target.classList.remove('drag-over');
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!draggedElement) return;
+
+            const targetGrid = e.target.closest('.photo-grid');
+            const targetItem = e.target.closest('.photo-item');
+
+            const fromSectionIndex = parseInt(draggedElement.dataset.sectionIndex);
+            const fromPhotoIndex = parseInt(draggedElement.dataset.photoIndex);
+            const toSectionIndex = parseInt(targetGrid.dataset.sectionIndex);
+
+            // Remove from original section
+            const photo = sections[fromSectionIndex].photos.splice(fromPhotoIndex, 1)[0];
+
+            // Add to new section
+            if (targetItem && targetItem !== draggedElement) {
+                const toPhotoIndex = parseInt(targetItem.dataset.photoIndex);
+                sections[toSectionIndex].photos.splice(toPhotoIndex, 0, photo);
+            } else {
+                sections[toSectionIndex].photos.push(photo);
+            }
+
+            renderSections();
+        }
+
+        function addNewSection() {
+            const nameInput = document.getElementById('new-section-name');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                alert('Please enter a section name');
+                return;
+            }
+
+            sections.push({ name: name, photos: [] });
+            nameInput.value = '';
+            renderSections();
+        }
+
+        function deleteSection(index) {
+            if (sections[index].photos.length > 0) {
+                if (!confirm('This section has photos. Are you sure you want to delete it? Photos will be lost.')) {
+                    return;
+                }
+            }
+            sections.splice(index, 1);
+            renderSections();
+        }
+
+        function generateCode() {
+            let html = '';
+            let index = 8; // Start from index 8 (after main gallery)
+
+            sections.forEach(section => {
+                if (section.photos.length === 0) return;
+
+                html += `                <!-- ${section.name} -->\n`;
+                section.photos.forEach(photo => {
+                    html += `                <div class="gallery-item" data-index="${index}">\n`;
+                    html += `                    <img src="images/${photo.file}" alt="${photo.alt}">\n`;
+                    html += `                </div>\n`;
+                    index++;
+                });
+                html += '\n';
+            });
+
+            const codeOutput = document.getElementById('code-output');
+            codeOutput.textContent = html;
+            codeOutput.classList.add('show');
+        }
+
+        function copyCode() {
+            const codeOutput = document.getElementById('code-output');
+            if (!codeOutput.textContent) {
+                alert('Please generate code first!');
+                return;
+            }
+
+            navigator.clipboard.writeText(codeOutput.textContent).then(() => {
+                const message = document.getElementById('success-message');
+                message.classList.add('show');
+                setTimeout(() => message.classList.remove('show'), 3000);
+            });
+        }
+
+        function resetToOriginal() {
+            if (confirm('Reset all photos to original organization?')) {
+                sections = [
+                    { name: 'Nature & Waterfront', photos: photos.slice(0, 11) },
+                    { name: 'Bedrooms', photos: photos.slice(11, 18) },
+                    { name: 'Living Spaces', photos: photos.slice(18, 22) },
+                    { name: 'Kitchen & Dining', photos: photos.slice(22, 25) },
+                    { name: 'Bathroom', photos: photos.slice(25, 26) },
+                    { name: 'Interior Details', photos: photos.slice(26, 40) },
+                    { name: 'Floor Plan', photos: photos.slice(40, 41) },
+                    { name: 'Additional', photos: photos.slice(41) }
+                ];
+                renderSections();
+            }
+        }
+
+        // Initialize
+        renderSections();
+    </script>
+</body>
+</html>
