@@ -211,7 +211,7 @@ class BookingCalendar {
 async function fetchBlockedDates() {
     try {
         // Try to fetch from your serverless function
-        const response = await fetch('/.netlify/functions/get-blocked-dates');
+        const response = await fetch('/api/get-blocked-dates');
         const data = await response.json();
 
         if (data.bookedDates && Array.isArray(data.bookedDates)) {
