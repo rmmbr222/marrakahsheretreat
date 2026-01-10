@@ -602,6 +602,75 @@ a {
     font-weight: bold;
 }
 
+/* Sleeping Arrangements Section */
+.sleeping-section {
+    padding: 5rem 0;
+    background: var(--bg-light);
+}
+
+.sleeping-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+}
+
+.sleeping-category {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+
+.sleeping-category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(44, 95, 93, 0.3);
+}
+
+.sleeping-category-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.sleeping-category-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+}
+
+.sleeping-list {
+    list-style: none;
+}
+
+.sleeping-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.sleeping-list li:last-child {
+    border-bottom: none;
+}
+
+.sleeping-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
 /* Benefits Section */
 .benefits-section {
     padding: 5rem 0;
