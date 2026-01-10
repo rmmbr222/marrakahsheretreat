@@ -565,6 +565,7 @@ a {
     color: var(--primary-color);
     position: relative;
     padding-bottom: 1rem;
+    white-space: nowrap;
 }
 
 .amenity-category-title::after {
