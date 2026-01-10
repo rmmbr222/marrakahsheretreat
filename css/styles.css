@@ -131,7 +131,7 @@ a {
 }
 
 .nav a {
-    color: var(--text-dark);
+    color: var(--primary-color);
     font-weight: 500;
     position: relative;
 }
