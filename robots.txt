@@ -1,0 +1,9 @@
+# Marrakahshe Retreat - Robots.txt
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas (if any)
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://marrakahsheretreat.vercel.app/sitemap.xml
