@@ -1298,20 +1298,33 @@ a {
         gap: 1.5rem;
         padding: 0;
         width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
     }
 
     .calendar {
         font-size: 0.85rem;
+        padding: 0.75rem;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .calendar-grid {
+        gap: 0.15rem;
+        max-width: 100%;
     }
 
     .calendar-day {
-        height: 45px;
-        font-size: 0.9rem;
+        height: 40px;
+        font-size: 0.85rem;
+        padding: 0;
+        min-width: 0;
     }
 
     .calendar-day-header {
-        padding: 0.5rem 0;
-        font-size: 0.75rem;
+        padding: 0.4rem 0;
+        font-size: 0.7rem;
     }
 
     .calendar-nav button {
@@ -1321,17 +1334,22 @@ a {
 
     /* Forms */
     .booking-form-container {
-        padding: 1.25rem;
+        padding: 1rem;
         margin: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .booking-form {
         padding: 0;
+        max-width: 100%;
     }
 
     .booking-calendar {
-        padding: 1.25rem;
+        padding: 1rem;
         margin: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .form-group {
