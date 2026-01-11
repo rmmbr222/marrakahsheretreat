@@ -157,34 +157,22 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
             mobileMenuToggle.classList.toggle('active');
         });
+
+        // Close menu when clicking a link
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                nav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
     }
-
-    // Add active class styles for mobile nav
-    const style = document.createElement('style');
-    style.textContent = `
-        .nav.active {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-        }
-
-        .mobile-menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-    `;
-    document.head.appendChild(style);
 });
