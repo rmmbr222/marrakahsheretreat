@@ -174,6 +174,10 @@ window.calculatePrice = function() {
 
 // Date input listeners
 document.addEventListener('DOMContentLoaded', function() {
+    // Clean up any leftover modals from previous session (e.g., if user clicked back button)
+    const existingModals = document.querySelectorAll('#booking-confirmation-modal, #booking-loading');
+    existingModals.forEach(modal => modal.remove());
+
     const checkInInput = document.getElementById('check-in');
     const checkOutInput = document.getElementById('check-out');
 
