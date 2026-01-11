@@ -774,9 +774,6 @@ a {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
 }
 
 .booking-calendar {
@@ -1298,8 +1295,9 @@ a {
     /* Calendar & Booking */
     .booking-container {
         grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 15px;
+        gap: 1.5rem;
+        padding: 0;
+        width: 100%;
     }
 
     .calendar {
@@ -1323,7 +1321,8 @@ a {
 
     /* Forms */
     .booking-form-container {
-        padding: 1.5rem;
+        padding: 1.25rem;
+        margin: 0;
     }
 
     .booking-form {
@@ -1331,7 +1330,8 @@ a {
     }
 
     .booking-calendar {
-        padding: 1.5rem;
+        padding: 1.25rem;
+        margin: 0;
     }
 
     .form-group {
