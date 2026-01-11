@@ -207,10 +207,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Booking Form Submission
     const bookingForm = document.getElementById('booking-form');
+    if (!bookingForm) {
+        console.error('Booking form not found!');
+        return;
+    }
+
     bookingForm.addEventListener('submit', function(e) {
+        console.log('Form submitted');
+
         // Validate dates
         const checkIn = document.getElementById('check-in').value;
         const checkOut = document.getElementById('check-out').value;
+
+        console.log('Check-in:', checkIn, 'Check-out:', checkOut);
 
         if (!checkIn || !checkOut) {
             e.preventDefault();
@@ -240,6 +249,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Prevent default submission and show confirmation
         e.preventDefault();
 
+        console.log('Validation passed, preparing confirmation...');
+
         // Get all form data
         const formData = new FormData(bookingForm);
         const guestName = formData.get('name');
@@ -249,7 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalPrice = document.getElementById('total-price').textContent;
         const bringingPets = formData.get('bringingPets') === 'on' ? 'Yes' : 'No';
 
+        console.log('Guest data:', { guestName, guestEmail, guestPhone, guests, totalPrice });
+
         // Show confirmation modal
+        console.log('Calling showBookingConfirmation...');
         showBookingConfirmation({
             checkIn,
             checkOut,
@@ -269,6 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Show booking confirmation modal
 function showBookingConfirmation(bookingData, form) {
+    console.log('showBookingConfirmation called with:', bookingData);
+
     // Create modal HTML
     const modalHTML = `
         <div id="booking-confirmation-modal" class="booking-modal">
