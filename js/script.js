@@ -175,4 +175,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Policies Modal
+    const policiesModal = document.getElementById('policies-modal');
+    const policiesClose = document.querySelector('.policies-close');
+    const policyLinks = document.querySelectorAll('a[href="#cancellation"], a[href="#house-rules"], a[href="#privacy"]');
+
+    // Open modal when policy links are clicked
+    policyLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (policiesModal) {
+                policiesModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // Close modal when X is clicked
+    if (policiesClose) {
+        policiesClose.addEventListener('click', () => {
+            policiesModal.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Close modal when clicking outside
+    if (policiesModal) {
+        policiesModal.addEventListener('click', (e) => {
+            if (e.target === policiesModal) {
+                policiesModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+    }
 });
