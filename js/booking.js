@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         // Get all form data
-        const formData = new FormData(form);
+        const formData = new FormData(bookingForm);
         const guestName = formData.get('name');
         const guestEmail = formData.get('email');
         const guestPhone = formData.get('phone');
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             totalPrice,
             season: pricing.name,
             bringingPets
-        }, form);
+        }, bookingForm);
 
         return false;
     });
