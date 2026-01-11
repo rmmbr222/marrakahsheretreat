@@ -122,17 +122,17 @@ window.calculatePrice = function() {
 
     // Update display
     document.getElementById('nights-label').textContent = `× ${nights} night${nights > 1 ? 's' : ''}`;
-    document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+    document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()} CAD`;
 
     // Update cleaning fee display
-    document.getElementById('cleaning-fee').textContent = `$${cleaningFee}`;
+    document.getElementById('cleaning-fee').textContent = `$${cleaningFee} CAD`;
 
     // Show/hide pet fee
     const petFeeRow = document.querySelector('.price-row.pet-fee');
     if (petFeeRow) {
         if (bringingPets) {
             petFeeRow.style.display = 'flex';
-            petFeeRow.querySelector('span:last-child').textContent = `$${petFee}`;
+            petFeeRow.querySelector('span:last-child').textContent = `$${petFee} CAD`;
         } else {
             petFeeRow.style.display = 'none';
         }
@@ -141,21 +141,21 @@ window.calculatePrice = function() {
     // Show HST
     const hstRow = document.querySelector('.price-row.hst');
     if (hstRow) {
-        hstRow.querySelector('span:last-child').textContent = `$${hst.toLocaleString()}`;
+        hstRow.querySelector('span:last-child').textContent = `$${hst.toLocaleString()} CAD`;
     }
 
     // Show Airbnb savings instead of discount
     const savingsRow = document.querySelector('.price-row .savings');
     if (savingsRow) {
-        savingsRow.parentElement.querySelector('.savings:last-child').textContent = `~$${airbnbFeeSavings.toLocaleString()}`;
+        savingsRow.parentElement.querySelector('.savings:last-child').textContent = `~$${airbnbFeeSavings.toLocaleString()} CAD`;
     }
 
-    document.getElementById('total-price').textContent = `$${total.toLocaleString()}`;
+    document.getElementById('total-price').textContent = `$${total.toLocaleString()} CAD`;
 
     // Show season info
     const seasonInfo = document.getElementById('season-info');
     if (seasonInfo) {
-        seasonInfo.innerHTML = `<strong>${pricing.name}:</strong> ${pricing.minNights}-night minimum • $${pricing.nightlyRate.toLocaleString()}/night`;
+        seasonInfo.innerHTML = `<strong>${pricing.name}:</strong> ${pricing.minNights}-night minimum • $${pricing.nightlyRate.toLocaleString()} CAD/night`;
         seasonInfo.style.display = 'block';
     }
 
