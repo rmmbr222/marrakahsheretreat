@@ -237,11 +237,226 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Form is valid - let it submit to Web3Forms
-        // Web3Forms will handle the submission and redirect to success.html
-        return true;
+        // Prevent default submission and show confirmation
+        e.preventDefault();
+
+        // Get all form data
+        const formData = new FormData(form);
+        const guestName = formData.get('name');
+        const guestEmail = formData.get('email');
+        const guestPhone = formData.get('phone');
+        const guests = formData.get('guests');
+        const totalPrice = document.getElementById('total-price').textContent;
+        const bringingPets = formData.get('bringingPets') === 'on' ? 'Yes' : 'No';
+
+        // Show confirmation modal
+        showBookingConfirmation({
+            checkIn,
+            checkOut,
+            nights,
+            guests,
+            guestName,
+            guestEmail,
+            guestPhone,
+            totalPrice,
+            season: pricing.name,
+            bringingPets
+        }, form);
+
+        return false;
     });
 });
+
+// Show booking confirmation modal
+function showBookingConfirmation(bookingData, form) {
+    // Create modal HTML
+    const modalHTML = `
+        <div id="booking-confirmation-modal" class="booking-modal">
+            <div class="booking-modal-content">
+                <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Confirm Your Booking Request</h2>
+
+                <div class="confirmation-details">
+                    <h3>Reservation Details</h3>
+                    <p><strong>Check-in:</strong> ${formatDate(bookingData.checkIn)}</p>
+                    <p><strong>Check-out:</strong> ${formatDate(bookingData.checkOut)}</p>
+                    <p><strong>Nights:</strong> ${bookingData.nights}</p>
+                    <p><strong>Guests:</strong> ${bookingData.guests}</p>
+                    <p><strong>Season:</strong> ${bookingData.season}</p>
+                    <p><strong>Pets:</strong> ${bookingData.bringingPets}</p>
+
+                    <h3 style="margin-top: 1.5rem;">Guest Information</h3>
+                    <p><strong>Name:</strong> ${bookingData.guestName}</p>
+                    <p><strong>Email:</strong> ${bookingData.guestEmail}</p>
+                    <p><strong>Phone:</strong> ${bookingData.guestPhone}</p>
+
+                    <div class="total-summary">
+                        <strong>Total:</strong> ${bookingData.totalPrice}
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="confirm-booking-btn" class="btn btn-primary">Confirm & Submit</button>
+                    <button id="cancel-booking-btn" class="btn btn-secondary">Edit Booking</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modal = document.getElementById('booking-confirmation-modal');
+    const confirmBtn = document.getElementById('confirm-booking-btn');
+    const cancelBtn = document.getElementById('cancel-booking-btn');
+
+    // Show modal
+    setTimeout(() => modal.classList.add('active'), 10);
+
+    // Confirm button - submit form
+    confirmBtn.addEventListener('click', () => {
+        modal.remove();
+        submitFormWithLoading(form);
+    });
+
+    // Cancel button - close modal
+    cancelBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+    });
+}
+
+// Submit form with loading state
+function submitFormWithLoading(form) {
+    // Create loading overlay
+    const loadingHTML = `
+        <div id="booking-loading" class="booking-modal active">
+            <div class="booking-modal-content" style="text-align: center;">
+                <div class="loading-spinner"></div>
+                <h3 style="color: var(--primary-color); margin-top: 1rem;">Submitting your booking request...</h3>
+                <p>Please wait while we process your request.</p>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', loadingHTML);
+
+    // Submit form
+    form.submit();
+}
+
+// Format date for display
+function formatDate(dateString) {
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Add styles for modal
+const modalStyles = document.createElement('style');
+modalStyles.textContent = `
+    .booking-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .booking-modal.active {
+        opacity: 1;
+    }
+
+    .booking-modal-content {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .confirmation-details {
+        background: var(--bg-light);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+    }
+
+    .confirmation-details h3 {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .confirmation-details p {
+        margin: 0.5rem 0;
+        color: var(--text-dark);
+    }
+
+    .total-summary {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 2px solid var(--primary-color);
+        font-size: 1.25rem;
+        color: var(--primary-color);
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn-secondary {
+        background: white;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .btn-secondary:hover {
+        background: var(--bg-light);
+    }
+
+    .loading-spinner {
+        border: 4px solid var(--bg-light);
+        border-top: 4px solid var(--primary-color);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 640px) {
+        .booking-modal-content {
+            padding: 1.5rem;
+        }
+
+        .modal-actions {
+            flex-direction: column;
+        }
+
+        .modal-actions .btn {
+            width: 100%;
+        }
+    }
+`;
+document.head.appendChild(modalStyles);
 
 // Web3Forms handles submission automatically
 // Form will submit to Web3Forms and redirect to success.html
