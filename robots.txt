@@ -6,4 +6,4 @@ Allow: /
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://marrakahsheretreat.vercel.app/sitemap.xml
+Sitemap: https://www.marrakahsheretreat.com/sitemap.xml
